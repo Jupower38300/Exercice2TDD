@@ -1,0 +1,12 @@
+node_modules/
+
+
+dist/
+build/
+out/
+
+
+*.log
+*.tmp
+*.temp
+*.bak
