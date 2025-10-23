@@ -1,13 +1,13 @@
 import { BankAccount } from "../src/bankaccount";
-import { Transactions } from "../src/transaction";
+import { Transaction } from "../src/transaction";
 
-describe("Gestion des Comptes Bancaire", () => {
+describe("Gestion des Comptes Bancaires", () => {
   let account: BankAccount;
-  let transaction: Transactions;
+  let other: BankAccount;
 
   beforeEach(() => {
     account = new BankAccount();
-    transaction = new Transactions();
+    other = new BankAccount();
   });
 
   it("test_account_balance_Solde_ShouldBe0", () => {
@@ -15,16 +15,18 @@ describe("Gestion des Comptes Bancaire", () => {
   });
 
   it("test_deposit_SimpleDeposit_Allow", () => {
-    account.depoosit(100);
+    account.deposit(100, "Dépôt");
     expect(account.balance).toBe(100);
   });
 
   it("test_deposit_NegativeNumber_Refuse", () => {
-    expect(() => account.deposit(-50)).toThrow(positive);
+    expect(() => account.deposit(-50, "Dépôt")).toThrow(
+      "Le montant doit être positif",
+    );
   });
 
   it("test_withdrawal_SimpleWithdraw_Allow", () => {
-    account.deposit(100);
+    account.deposit(100, "Dépôt");
     account.withdraw(50);
     expect(account.balance).toBe(50);
   });
@@ -40,7 +42,7 @@ describe("Gestion des Comptes Bancaire", () => {
 
   it("test_transfer_TransferBetweenAccounts_Allow", () => {
     account.deposit(100);
-    account.transfer(otheraccount, 50);
+    account.transfer(other, 50);
     expect(account.balance).toBe(50);
     expect(other.balance).toBe(50);
   });
@@ -52,8 +54,9 @@ describe("Gestion des Comptes Bancaire", () => {
   it("test_transfer_TransferToBlockedAccount_Block", () => {
     account.deposit(100);
     other.block();
-
-    expect(() => account.transfer(other, 50)).toThrow("Bloqué");
+    expect(() => account.transfer(other, 50)).toThrow(
+      "Le compte destinataire est bloqué",
+    );
   });
 
   it("test_GetHistory_NoteEachTransaction_ShouldAppearInHistory", () => {
@@ -61,7 +64,7 @@ describe("Gestion des Comptes Bancaire", () => {
     account.withdraw(50);
     const history = account.getHistory();
     expect(history.length).toBe(2);
-    expect(history[0]).toBeInstanceOf(Transactions);
+    expect(history[0]).toBeInstanceOf(Transaction);
   });
 
   it("test_GetHistory_ModifyingDirectly_Refuse", () => {
@@ -73,7 +76,7 @@ describe("Gestion des Comptes Bancaire", () => {
 
   it("test_GetLastTransactions_FetchingTheLastTransactions_Last10", () => {
     for (let i = 0; i < 15; i++) account.deposit(100);
-    const last10 = account.getlastTransactions();
-    expect(laast10.length()).toBe(10);
+    const last10 = account.getLastTransactions();
+    expect(last10.length).toBe(10);
   });
 });
