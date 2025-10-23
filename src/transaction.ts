@@ -5,10 +5,10 @@ export type TransactionTypes =
   | "interest";
 
 export class Transaction {
-  readonly type: TransactionTypes;
-  readonly amount: number;
-  readonly date: Date;
-  readonly description: string;
+  type: TransactionTypes;
+  amount: number;
+  date: Date;
+  description: string;
 
   constructor(
     type: TransactionTypes,
